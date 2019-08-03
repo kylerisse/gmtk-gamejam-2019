@@ -3,7 +3,7 @@ class Arrow {
 
     constructor(x, y) {
         this.loc = createVector(x, y)
-        this.speed = 5
+        this.speed = 10
         this.onPlayer = true
         this.inFlight = false
         this.force = createVector(0, 0) 
