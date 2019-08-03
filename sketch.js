@@ -13,6 +13,7 @@ function preload() {
 
 function setup() {
     createCanvas(1024, 768);
+    frameRate(30);
     zombies = [];
     player = new Player(width / 2, height / 2);
 }
@@ -57,7 +58,7 @@ function keyReleased() {
 function keyPressed() {
     // left
     if (keyCode == 65) {
-
+        
     }
     // right
     if (keyCode == 68) {
