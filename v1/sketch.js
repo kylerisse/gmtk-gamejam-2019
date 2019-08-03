@@ -7,15 +7,15 @@ var enemies
 
 function preload() {
     playerImages = []
-    playerImages.push(loadImage('images/bow_men/guy_body.png'))
-    playerImages.push(loadImage('images/bow_men/guy_legs.png'))
+    playerImages.push(loadImage('../images/bow_men/guy_body.png'))
+    playerImages.push(loadImage('../images/bow_men/guy_legs.png'))
     bowImages = []
-    bowImages.push(loadImage('images/bow_men/bow_1.png'))
-    bowImages.push(loadImage('images/bow_men/bow_2.png'))
-    bowImages.push(loadImage('images/bow_men/bow_3.png'))
-    bowImages.push(loadImage('images/bow_men/bow_4.png'))
-    bowImages.push(loadImage('images/bow_men/bow_5.png'))
-    arrowImage = loadImage('images/bow_men/arrow.png')
+    bowImages.push(loadImage('../images/bow_men/bow_1.png'))
+    bowImages.push(loadImage('../images/bow_men/bow_2.png'))
+    bowImages.push(loadImage('../images/bow_men/bow_3.png'))
+    bowImages.push(loadImage('../images/bow_men/bow_4.png'))
+    bowImages.push(loadImage('../images/bow_men/bow_5.png'))
+    arrowImage = loadImage('../images/bow_men/arrow.png')
 }
 
 function setup() {

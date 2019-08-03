@@ -2,8 +2,9 @@
 class Zombie {
 
     constructor(x, y) {
-        this.x = x
-        this.y = y
+        this.x = x;
+        this.y = y;
+        this.w = 64;
 
         // load sprites from spriteSheet
         this.downImg = this.loadSprites(0);
