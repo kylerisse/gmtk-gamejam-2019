@@ -1,15 +1,20 @@
 
 var zombieSpriteSheet;
+var zombies;
 var groundImage;
+var playerSpriteSheet;
+var player;
 
 function preload() {
     zombieSpriteSheet = loadImage('images/zombie/zombie.png');
     groundImage = loadImage('images/ground/ground.png', 128, 128);
+    playerSpriteSheet = loadImage('images/player/player.png');
 }
 
 function setup() {
-    createCanvas(1024, 768)
-    zombies = []
+    createCanvas(1024, 768);
+    zombies = [];
+    player = new Player(width / 2, height / 2);
 }
 
 function draw() {
@@ -26,6 +31,8 @@ function draw() {
             return
         }
     }
+    player.update();
+    player.draw();
 }
 
 function keyReleased() {

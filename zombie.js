@@ -4,7 +4,6 @@ class Zombie {
     constructor(x, y) {
         this.x = x
         this.y = y
-        this.speed = 5;
 
         // load sprites from spriteSheet
         this.downImg = this.loadSprites(0);
