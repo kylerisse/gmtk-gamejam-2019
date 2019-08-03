@@ -17,9 +17,11 @@ function draw() {
         zombies[i].draw()
         if (zombies[i].x < -100 || zombies[i].x > width + 100) {
             zombies.splice(i, 1);
+            return
         }
         if (zombies[i].y < -100 || zombies[i].y > height + 100) {
             zombies.splice(i, 1);
+            return
         }
     }
 }
