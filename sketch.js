@@ -1,8 +1,10 @@
 
 var zombieSpriteSheet;
+var groundImage;
 
 function preload() {
     zombieSpriteSheet = loadImage('images/zombie/zombie.png');
+    groundImage = loadImage('images/ground/ground.png', 128, 128);
 }
 
 function setup() {
@@ -11,7 +13,7 @@ function setup() {
 }
 
 function draw() {
-    background(128)
+    background(groundImage)
     for (let i = zombies.length - 1; i >= 0; i--) {
         zombies[i].update()
         zombies[i].draw()
