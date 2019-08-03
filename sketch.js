@@ -7,7 +7,9 @@ function setup() {
     player = new Player(width / 2, height / 2)
     walls = []
     walls.push(new Wall(0, 0, 30, 500))
-    walls.push(new Wall(width - 30, height, 30, 500))
+    walls.push(new Wall(width - 30, 0, 30, 500))
+    walls.push(new Wall(0, height - 130, 800, 30))
+    walls.push(new Wall(0, 0, 800, 30))
     enemies = []
 }
 

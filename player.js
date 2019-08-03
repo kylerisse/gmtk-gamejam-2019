@@ -3,6 +3,7 @@ class Player {
     constructor(x, y, arrow) {
         // player position
         this.loc = createVector(x, y)
+        this.w = 20
 
         // weapon controls
         this.aiming = false
@@ -33,6 +34,18 @@ class Player {
             this.aimCharge += 1 
             console.log("charging: " + this.aimCharge + "/60")
         }
+        let collided = false
+        for (let i = 0; i < walls.length; i++) {
+            console.log(walls[i], player)
+            if (collidePointRect(walls[i].x, walls[i].y, this.loc.x, this.loc.y, this.w, this.w)) {
+                collided = true
+            }
+        }
+        console.log(collided)
+        if (collided === true) {
+            return
+        }
+        // movement
         if (this.movingUp) {
             this.aiming = false
             this.aimCharge = 0
@@ -58,7 +71,7 @@ class Player {
     draw() {
         // draw player
         fill(255, 0, 0)
-        ellipse(this.loc.x, this.loc.y, 20)
+        rect(this.loc.x, this.loc.y, 20, 20)
 
         // draw arrow
         this.arrow.draw()
@@ -74,7 +87,7 @@ class Player {
         rect(0, height - 20, width, 20)
         if (this.aimCharge > 0 && this.aimCharge < 60) {
             fill(32, 128, 0)
-            rect(0, height - 20, this.aimCharge * (width / 60), 20)
+            rect(0, height - 20, this.aimCharge * (width / 60), this.w, this.w)
         } 
     }
 
