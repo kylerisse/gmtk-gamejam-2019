@@ -86,7 +86,10 @@ class Player {
         }
 
         // draw arrow
-        this.arrow.draw()
+        if (!this.arrow.onPlayer) {
+            this.arrow.update()
+            this.arrow.draw()
+        }
 
         // draw arrow bar
         if (this.aimCharge >= 60) {
@@ -118,7 +121,8 @@ class Player {
 
     fire() {
         if (this.aimCharge === 60) {
-            console.log("Fire")
+            this.arrow.loc = createVector(this.loc.x + 29, this.loc.y + 30)
+            this.arrow.fire()
         }
         this.aimCharge = 0
     }
