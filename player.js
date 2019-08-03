@@ -32,20 +32,7 @@ class Player {
     update() {
         if (this.arrow.onPlayer && this.aiming && this.aimCharge < 60) {
             this.aimCharge += 1 
-            console.log("charging: " + this.aimCharge + "/60")
         }
-        let collided = false
-        for (let i = 0; i < walls.length; i++) {
-            console.log(walls[i], player)
-            if (collidePointRect(walls[i].x, walls[i].y, this.loc.x, this.loc.y, this.w, this.w)) {
-                collided = true
-            }
-        }
-        console.log(collided)
-        if (collided === true) {
-            return
-        }
-        // movement
         if (this.movingUp) {
             this.aiming = false
             this.aimCharge = 0
@@ -57,11 +44,13 @@ class Player {
             this.loc.add(this.moveDown)
         }
         if (this.movingLeft) {
+            this.faceLeft = true
             this.aiming = false
             this.aimCharge = 0
             this.loc.add(this.moveLeft)
         }
         if (this.movingRight) {
+            this.faceLeft = false
             this.aiming = false
             this.aimCharge = 0
             this.loc.add(this.moveRight)
@@ -70,8 +59,31 @@ class Player {
 
     draw() {
         // draw player
-        fill(255, 0, 0)
-        rect(this.loc.x, this.loc.y, 20, 20)
+        image(playerImages[1], this.loc.x + 18, this.loc.y + 55, 40, 30)
+        image(playerImages[0], this.loc.x, this.loc.y, 70, 70)
+        let bowI = floor(this.aimCharge / 12)
+        if (bowI <= 0) {
+            image(bowImages[0], this.loc.x + 60, this.loc.y, 18, 80)
+            if (this.arrow.onPlayer) {
+                image(arrowImage, this.loc.x + 60, this.loc.y + 30, 63, 15)
+            }
+        }
+        if (bowI === 1) {
+            image(bowImages[1], this.loc.x + 56, this.loc.y, 22, 80)
+            image(arrowImage, this.loc.x + 56, this.loc.y + 30, 63, 15)
+        }
+        if (bowI === 2) {
+            image(bowImages[2], this.loc.x + 49, this.loc.y, 29, 80)
+            image(arrowImage, this.loc.x + 49, this.loc.y + 30, 63, 15)
+        }
+        if (bowI === 3) {
+            image(bowImages[3], this.loc.x + 40, this.loc.y, 38, 80)
+            image(arrowImage, this.loc.x + 40, this.loc.y + 30, 63, 15)
+        }
+        if (bowI >= 4) {
+            image(bowImages[4], this.loc.x + 29, this.loc.y, 49, 80)
+            image(arrowImage, this.loc.x + 29, this.loc.y + 30, 63, 15)
+        }
 
         // draw arrow
         this.arrow.draw()
@@ -85,10 +97,13 @@ class Player {
             fill(128)
         }
         rect(0, height - 20, width, 20)
+
         if (this.aimCharge > 0 && this.aimCharge < 60) {
             fill(32, 128, 0)
             rect(0, height - 20, this.aimCharge * (width / 60), this.w, this.w)
         } 
+
+
     }
 
     // call setSpeed whenever player speed changes

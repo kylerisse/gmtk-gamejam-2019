@@ -16,11 +16,11 @@ class Wall {
     }
 
     // check if a vector collides with this
-    collides(v) {
-        if (v.x < this.x || v.x > this.x + this.w) {
+    collides(v, w, h) {
+        if (v.x < this.x || v.x + w < this.x || v.x > this.x + this.w || v.x + w > this.x + this.w) {
             return false
         }
-        if (v.y < this.y || v.y > this.y + this.h) {
+        if (v.y < this.y || v.y + h < this.y || v.y > this.y + this.h || v.y + h > this.y + this.h) {
             return false
         }
         return true
