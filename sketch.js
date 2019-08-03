@@ -5,6 +5,11 @@ var groundImage;
 var playerSpriteSheet;
 var player;
 
+const topEdge = 30
+const bottomEdge = 688
+const rightEdge = 890
+const leftEdge = 30
+
 function preload() {
     zombieSpriteSheet = loadImage('images/zombie/zombie.png');
     groundImage = loadImage('images/ground/ground.png', 128, 128);
@@ -39,45 +44,46 @@ function draw() {
 function keyReleased() {
     // left
     if (keyCode === 65) {
-
+        player.movingLeft = false;
     }
     // right
     if (keyCode === 68) {
-
+        player.movingRight = false;
     }
     // up
     if (keyCode === 87) {
-
+        player.movingUp = false;
     }
     // down
     if (keyCode === 83) {
-
+        player.movingDown = false;
     }
 }
 
 function keyPressed() {
     // left
-    if (keyCode == 65) {
-        
+    if (keyCode === 65) {
+        player.movingLeft = true;
     }
     // right
-    if (keyCode == 68) {
-
+    if (keyCode === 68) {
+        player.movingRight = true;
     }
     // up
     if (keyCode === 87) {
-
+        player.movingUp = true;
     }
     // down
-    if (keyCode == 83) {
-
+    if (keyCode === 83) {
+        player.movingDown = true;
     }
 }
 
 function mouseReleased() {
-
+    player.aiming = false;
+    player.fire();
 }
 
 function mousePressed() {
-    zombies.push(new Zombie(mouseX, mouseY));
+    player.aiming = true;
 }

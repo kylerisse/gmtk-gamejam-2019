@@ -94,7 +94,7 @@ class Zombie {
 
     loadSprites(row) {
         let animations = []
-        for (let i = 0; i <= 2; i++) {
+        for (let i = 0; i < 3; i++) {
             animations.push(zombieSpriteSheet.get(i * 64, row * 64, 64, 64));
         }
         return animations;
