@@ -1,12 +1,14 @@
-
 class Player {
+    constructor(x, y, arrow) {
+        this.x = x;
+        this.y = y;
+        this.w = 64;
 
-    constructor(x, y) {
-        this.x = x
-        this.y = y
-        this.w = 64
+        // Arrow
+        this.has_arrow = true;
+
         // how many pixel per move
-        this.speed = 5
+        this.speed = 5;
 
         // load sprites from spriteSheet
         this.downImg = this.loadSprites(10, 9);
@@ -33,13 +35,14 @@ class Player {
         this.movingDown = false;
         this.movingLeft = false;
         this.movingRight = false;
-
     }
 
     update() {
         if (this.aiming) {
             // get current direction based on mouse if aiming
-            this.dir = Math.atan2(this.x + 32 - mouseX, this.y + 32 - mouseY) * 180 / Math.PI;
+            this.dir =
+                (Math.atan2(this.x + 32 - mouseX, this.y + 32 - mouseY) * 180) /
+                Math.PI;
             if (this.aimCharge < 60) {
                 this.aimCharge++;
             }
@@ -58,7 +61,7 @@ class Player {
             if (this.y + this.speed > topEdge) {
                 this.y -= this.speed;
             }
-        } 
+        }
         if (this.movingDown) {
             this.aimCharge = 0;
             this.dir = -180;
@@ -140,15 +143,28 @@ class Player {
 
     fire() {
         this.aimCharge = 0;
-        // call arrow fire
+        playerArrow = Arrow.Fire(
+            this.center_x,
+            this.center_y,
+            this.w / 2,
+            mouseX,
+            mouseY
+        );
     }
 
     loadSprites(row, cols) {
-        let animations = []
+        let animations = [];
         for (let i = 0; i < cols; i++) {
             animations.push(playerSpriteSheet.get(i * 64, row * 64, 64, 64));
         }
         return animations;
     }
 
+    get center_x() {
+        return this.x + this.w / 2;
+    }
+
+    get center_y() {
+        return this.y + this.w / 2;
+    }
 }

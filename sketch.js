@@ -1,14 +1,14 @@
-
 var zombieSpriteSheet;
 var zombies;
 var groundImage;
 var playerSpriteSheet;
 var player;
+var playerArrow;
 
-const topEdge = 30
-const bottomEdge = 688
-const rightEdge = 890
-const leftEdge = 30
+const topEdge = 30;
+const bottomEdge = 688;
+const rightEdge = 890;
+const leftEdge = 30;
 
 function preload() {
     zombieSpriteSheet = loadImage('images/zombie/zombie.png');
@@ -24,21 +24,26 @@ function setup() {
 }
 
 function draw() {
-    background(groundImage)
+    background(groundImage);
     for (let i = zombies.length - 1; i >= 0; i--) {
-        zombies[i].update()
-        zombies[i].draw()
+        zombies[i].update();
+        zombies[i].draw();
         if (zombies[i].x < -100 || zombies[i].x > width + 100) {
             zombies.splice(i, 1);
-            return
+            return;
         }
         if (zombies[i].y < -100 || zombies[i].y > height + 100) {
             zombies.splice(i, 1);
-            return
+            return;
         }
     }
     player.update();
     player.draw();
+
+    if (playerArrow !== undefined) {
+        playerArrow.update();
+        playerArrow.draw('white');
+    }
 }
 
 function keyReleased() {
