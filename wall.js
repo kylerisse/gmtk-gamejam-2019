@@ -39,8 +39,4 @@ class Wall {
 
         return [left, right, top, bottom];
     }
-
-    get_lines() {
-        return get_rectangle_lines(this.x, this.y, this.w, this.h);
-    }
 }

@@ -1,3 +1,5 @@
+const REALLY_BIG_NUMBER = 100000000;
+
 class Arrow {
     constructor(base, vec, length, speed) {
         this.base = base;
@@ -28,38 +30,45 @@ class Arrow {
     }
 
     check_collision(e) {
-        const head = p5.Vector.add(
-            this.get_next_arrow_base(),
-            p5.Vector.mult(this.vec, this.length)
+        const next_base = this.get_next_arrow_base();
+        const next_head = this.get_next_arrow_head();
+        return collideLineRect(
+            next_base.x,
+            next_base.y,
+            next_head.x,
+            next_head.y,
+            e.x + 1,
+            e.y + 1,
+            e.w + 1,
+            e.h + 1
         );
-
-        return collidePointRect(head.x, head.y, e.x, e.y, e.w, e.h);
     }
 
     get_arrow_head() {
         return p5.Vector.mult(this.vec, this.length);
     }
 
+    get_next_arrow_head() {
+        return p5.Vector.add(
+            this.get_next_arrow_base(),
+            p5.Vector.mult(this.vec, this.length)
+        );
+    }
+
     get_next_arrow_base() {
-        return p5.Vector.add(this.base, p5.Vector.mult(this.vec, this.speed));
+        return p5.Vector.add(
+            p5.Vector.add(this.base, p5.Vector.mult(this.vec, this.speed))
+        );
     }
 
-    bounce(poly) {}
-
-    update(poly) {
-        if (!poly) {
-            this.base = this.get_next_arrow_base();
-        } else {
-            this.vec = createVector(this.vec.x * -1, this.vec.y * -1);
+    update(rect) {
+        this.base = this.get_next_arrow_base();
+        if (rect) {
+            this.vec = createVector(
+                (this.vec.x * random(-100)) / 100,
+                (this.vec.y * random(-100)) / 100
+            ).normalize();
         }
-    }
-
-    get_shortest_vector_to_poly(poly) {
-        const lines = poly.get_lines;
-
-        let vector = null;
-
-        lines.forEach(line => {});
     }
 
     static Fire(e_x, e_y, offset_scalar, to_x, to_y) {
@@ -85,6 +94,6 @@ class Arrow {
     }
 
     static get DEFAULT_SPEED() {
-        return 40;
+        return 20;
     }
 }

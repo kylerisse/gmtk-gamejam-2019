@@ -1,6 +1,4 @@
-
 class Zombie {
-
     constructor(x, y) {
         this.x = x;
         this.y = y;
@@ -21,10 +19,13 @@ class Zombie {
 
         // temporary random stuff timer
         this.doRandomStuffTimer = 199;
-
     }
 
-    update() {
+    update(hit_by_arrow) {
+        if (hit_by_arrow) {
+            this.exists = false;
+        }
+
         if (this.moving) {
             this.animationTimer++;
             if (this.animationTimer > 10) {
@@ -56,14 +57,14 @@ class Zombie {
                 }
             }
             if (this.playerCollides()) {
-                gameState = "DEAD";
+                gameState = 'DEAD';
             }
         }
 
         // do random stuff for now
         if (this.doRandomStuffTimer > 200) {
-            let newMoving = random(1)
-            if (newMoving > .5) {
+            let newMoving = random(1);
+            if (newMoving > 0.5) {
                 this.moving = true;
             } else {
                 this.moving = false;
@@ -84,30 +85,29 @@ class Zombie {
             }
         }
         this.doRandomStuffTimer++;
-
     }
 
     draw() {
         if (this.dir == 'DOWN') {
             image(this.downImg[this.imgIndex], this.x, this.y);
-            return
+            return;
         }
         if (this.dir == 'RIGHT') {
             image(this.rightImg[this.imgIndex], this.x, this.y);
-            return
+            return;
         }
         if (this.dir == 'UP') {
             image(this.upImg[this.imgIndex], this.x, this.y);
-            return
+            return;
         }
         if (this.dir == 'LEFT') {
             image(this.leftImg[this.imgIndex], this.x, this.y);
-            return
+            return;
         }
     }
 
     loadSprites(row) {
-        let animations = []
+        let animations = [];
         for (let i = 0; i < 3; i++) {
             animations.push(zombieSpriteSheet.get(i * 64, row * 64, 64, 64));
         }
@@ -118,7 +118,7 @@ class Zombie {
         for (let wall of walls) {
             if (this.x + x == wall.x || this.x + x == wall.x + wall.w) {
                 return true;
-            } 
+            }
             if (this.y + y == wall.y || this.y + y == wall.y + wall.h) {
                 return true;
             }
@@ -126,7 +126,11 @@ class Zombie {
         return false;
     }
 
-    playerCollides(){}
+    get h() {
+        return this.w;
+    }
+
+    playerCollides() {}
     /***
     playerCollides() {
         if (this.x > player.x && this.x < player.x + player.w) {
@@ -137,5 +141,4 @@ class Zombie {
         }
     }
     ***/
-
 }

@@ -153,7 +153,6 @@ class Player {
             );
         }
         this.aimCharge = 0;
-
     }
 
     loadSprites(row, cols) {
@@ -170,5 +169,9 @@ class Player {
 
     get center_y() {
         return this.y + this.w / 2;
+    }
+
+    get h() {
+        return this.w;
     }
 }

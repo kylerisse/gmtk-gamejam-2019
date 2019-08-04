@@ -93,7 +93,7 @@ function draw() {
         background(aboutImage);
     }
 
-    if (gameState == "DEAD") {
+    if (gameState == 'DEAD') {
         fill(255, 0, 0, 25);
         rect(0, 0, 1024, 768);
     }
@@ -136,22 +136,32 @@ function draw() {
         player.draw();
 
         if (playerArrow !== undefined) {
-            playerArrow.update();
-            playerArrow.draw('white');
-        }
-
-        if (playerArrow !== undefined) {
-            let wall_hit = null;
-            walls.forEach(wall => {
-                if (playerArrow.check_collision(wall)) {
-                    wall_hit = wall;
-                }
-            });
-    
-            playerArrow.update(wall_hit);
-            playerArrow.draw('white');
+            check_arrow_hits();
         }
     }
+}
+
+function check_arrow_hits() {
+    if (playerArrow.check_collision(player)) {
+        playerArrow = undefined;
+        return;
+    }
+
+    let wall_hit = false;
+    walls.forEach(wall => {
+        if (playerArrow.check_collision(wall)) {
+            wall_hit = wall;
+        }
+    });
+
+    zombies.forEach(zombie => {
+        if (playerArrow.check_collision(zombie)) {
+            zombie.update(true);
+        }
+    });
+
+    playerArrow.update(wall_hit);
+    playerArrow.draw('white');
 }
 
 function keyReleased() {
