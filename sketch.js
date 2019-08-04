@@ -4,12 +4,17 @@ var groundImage;
 var playerSpriteSheet;
 var player;
 var playerArrow;
+var walls;
 
 var arrowSound;
 var zombiegrunt;
 var zombiehit;
 var gameMusic;
 var menuMusic;
+
+const WINDOW_WIDTH = 1024;
+const WINDOW_HEIGHT = 768;
+const EDGE_WALL_THICKNESS = 32;
 
 const topEdge = 30;
 const bottomEdge = 688;
@@ -23,25 +28,31 @@ function preload() {
 
     soundFormats('mp3');
     arrowSound = loadSound('sound/arrow.mp3');
-    arrowSound.setVolume(.4);
+    arrowSound.setVolume(0.4);
     zombieGruntSound = loadSound('sound/zombiegrunt.mp3');
-    zombieGruntSound.setVolume(.4);
+    zombieGruntSound.setVolume(0.4);
     zombieHitSound = loadSound('sound/zombiehit.mp3');
-    zombieHitSound.setVolume(.5);
+    zombieHitSound.setVolume(0.5);
     menuMusic = loadSound('sound/jitters.mp3');
-    menuMusic.setVolume(.1);
+    menuMusic.setVolume(0.1);
     menuMusic.setLoop(true);
     gameMusic = loadSound('sound/gameMusic');
-    gameMusic.setVolume(.1);
+    gameMusic.setVolume(0.1);
     gameMusic.setLoop(true);
 }
 
 function setup() {
-    createCanvas(1024, 768);
+    createCanvas(WINDOW_WIDTH, WINDOW_HEIGHT);
     frameRate(30);
     zombies = [];
     player = new Player(width / 2, height / 2);
     gameMusic.play();
+
+    walls = Wall.getBorderWalls(
+        WINDOW_WIDTH,
+        WINDOW_HEIGHT,
+        EDGE_WALL_THICKNESS
+    );
 }
 
 function draw() {
@@ -49,6 +60,11 @@ function draw() {
     if (zombies.length > 0 && random(10000) > 9995) {
         zombieGruntSound.play();
     }
+
+    walls.forEach(wall => {
+        wall.draw();
+    });
+
     for (let i = zombies.length - 1; i >= 0; i--) {
         zombies[i].update();
         zombies[i].draw();
@@ -61,6 +77,7 @@ function draw() {
             return;
         }
     }
+
     player.update();
     player.draw();
 
