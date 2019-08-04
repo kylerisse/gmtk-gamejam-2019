@@ -1,10 +1,11 @@
-
 class Player {
+    constructor(x, y, arrow) {
+        this.x = x;
+        this.y = y;
+        this.w = 64;
 
-    constructor(x, y) {
-        this.x = x
-        this.y = y
-        this.w = 64
+        // Arrow
+        this.has_arrow = true;
 
         // load sprites from spriteSheet
         this.downImg = this.loadSprites(10, 9);
@@ -26,11 +27,12 @@ class Player {
         this.movingDown = false;
         this.movingLeft = false;
         this.movingRight = false;
-
     }
 
     update() {
-        this.dir = Math.atan2(this.x + 32 - mouseX, this.y + 32 - mouseY) * 180 / Math.PI;
+        this.dir =
+            (Math.atan2(this.x + 32 - mouseX, this.y + 32 - mouseY) * 180) /
+            Math.PI;
         console.log(this.dir);
     }
 
@@ -58,11 +60,10 @@ class Player {
     }
 
     loadSprites(row, cols) {
-        let animations = []
+        let animations = [];
         for (let i = 0; i < cols; i++) {
             animations.push(playerSpriteSheet.get(i * 64, row * 64, 64, 64));
         }
         return animations;
     }
-
 }
