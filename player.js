@@ -142,14 +142,18 @@ class Player {
     }
 
     fire() {
+        if (this.aimCharge >= 60) {
+            arrowSound.play();
+            playerArrow = Arrow.Fire(
+                this.center_x,
+                this.center_y,
+                this.w / 2,
+                mouseX,
+                mouseY
+            );
+        }
         this.aimCharge = 0;
-        playerArrow = Arrow.Fire(
-            this.center_x,
-            this.center_y,
-            this.w / 2,
-            mouseX,
-            mouseY
-        );
+
     }
 
     loadSprites(row, cols) {

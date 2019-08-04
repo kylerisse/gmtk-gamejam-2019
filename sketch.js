@@ -5,6 +5,12 @@ var playerSpriteSheet;
 var player;
 var playerArrow;
 
+var arrowSound;
+var zombiegrunt;
+var zombiehit;
+var gameMusic;
+var menuMusic;
+
 const topEdge = 30;
 const bottomEdge = 688;
 const rightEdge = 890;
@@ -14,6 +20,20 @@ function preload() {
     zombieSpriteSheet = loadImage('images/zombie/zombie.png');
     groundImage = loadImage('images/ground/ground.png', 128, 128);
     playerSpriteSheet = loadImage('images/player/player.png');
+
+    soundFormats('mp3');
+    arrowSound = loadSound('sound/arrow.mp3');
+    arrowSound.setVolume(.4);
+    zombieGruntSound = loadSound('sound/zombiegrunt.mp3');
+    zombieGruntSound.setVolume(.4);
+    zombieHitSound = loadSound('sound/zombiehit.mp3');
+    zombieHitSound.setVolume(.5);
+    menuMusic = loadSound('sound/jitters.mp3');
+    menuMusic.setVolume(.1);
+    menuMusic.setLoop(true);
+    gameMusic = loadSound('sound/gameMusic');
+    gameMusic.setVolume(.1);
+    gameMusic.setLoop(true);
 }
 
 function setup() {
@@ -21,10 +41,14 @@ function setup() {
     frameRate(30);
     zombies = [];
     player = new Player(width / 2, height / 2);
+    gameMusic.play();
 }
 
 function draw() {
     background(groundImage);
+    if (zombies.length > 0 && random(10000) > 9995) {
+        zombieGruntSound.play();
+    }
     for (let i = zombies.length - 1; i >= 0; i--) {
         zombies[i].update();
         zombies[i].draw();
