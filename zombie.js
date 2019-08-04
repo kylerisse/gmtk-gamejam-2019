@@ -56,9 +56,10 @@ class Zombie {
                     this.x -= 1;
                 }
             }
-            if (this.playerCollides()) {
-                gameState = 'DEAD';
-            }
+        }
+
+        if (this.playerCollides()) {
+            gameState = 'DEAD';
         }
 
         // do random stuff for now
@@ -115,13 +116,15 @@ class Zombie {
     }
 
     wallCollides(x, y) {
+        let newX = this.x + x;
+        let newY = this.y + y;
         for (let wall of walls) {
-            if (this.x + x == wall.x || this.x + x == wall.x + wall.w) {
-                return true;
-            }
-            if (this.y + y == wall.y || this.y + y == wall.y + wall.h) {
-                return true;
-            }
+            if (newX < wall.x + wall.w &&
+                newX + this.w > wall.x &&
+                newY < wall.y + wall.h &&
+                newY + this.w > wall.y) {
+                    return true;
+                }
         }
         return false;
     }
@@ -130,15 +133,13 @@ class Zombie {
         return this.w;
     }
 
-    playerCollides() {}
-    /***
     playerCollides() {
-        if (this.x > player.x && this.x < player.x + player.w) {
-            return true;
+        if (this.x < player.x + player.w &&
+            this.x + this.w > player.x &&
+            this.y < player.y + player.h &&
+            this.y + this.w > player.y) {
+                return true;
         }
-        if (this.y > player.y && this.y < player.y + player.w) {
-            return true;
-        }
+        return false;        
     }
-    ***/
 }

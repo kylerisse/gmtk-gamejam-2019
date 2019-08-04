@@ -58,8 +58,10 @@ class Player {
                 this.imgIndex = (this.imgIndex + 1) % this.upImg.length;
                 this.animationTimer = 1;
             }
-            if (this.y + this.speed > topEdge) {
-                this.y -= this.speed;
+            for (let i = 0; i < this.speed; i++) {
+                if (!this.wallCollide(0, -1)) {
+                    this.y -= 1;
+                }
             }
         }
         if (this.movingDown) {
@@ -70,8 +72,10 @@ class Player {
                 this.imgIndex = (this.imgIndex + 1) % this.downImg.length;
                 this.animationTimer = 1;
             }
-            if (this.y + this.speed < bottomEdge) {
-                this.y += this.speed;
+            for (let i = 0; i < this.speed; i++) {
+                if (!this.wallCollide(0, 1)) {
+                    this.y += 1;
+                }
             }
         }
         if (this.movingRight) {
@@ -82,8 +86,10 @@ class Player {
                 this.imgIndex = (this.imgIndex + 1) % this.rightImg.length;
                 this.animationTimer = 1;
             }
-            if (this.x + this.speed < rightEdge) {
-                this.x += this.speed;
+            for (let i = 0; i < this.speed; i++) {
+                if (!this.wallCollide(1, 0)) {
+                    this.x += 1;
+                }
             }
         }
         if (this.movingLeft) {
@@ -94,8 +100,10 @@ class Player {
                 this.imgIndex = (this.imgIndex + 1) % this.leftImg.length;
                 this.animationTimer = 1;
             }
-            if (this.x + this.speed > leftEdge) {
-                this.x -= this.speed;
+            for (let i = 0; i < this.speed; i++) {
+                if (!this.wallCollide(-1, 0)) {
+                    this.x -= 1;
+                }
             }
         }
     }
@@ -142,7 +150,7 @@ class Player {
     }
 
     fire() {
-        if (this.aimCharge >= 60) {
+        if (this.aimCharge >= 50) {
             arrowSound.play();
             playerArrow = Arrow.Fire(
                 this.center_x,
@@ -153,6 +161,20 @@ class Player {
             );
         }
         this.aimCharge = 0;
+    }
+
+    wallCollide(x, y) {
+        let newX = this.x + x;
+        let newY = this.y + y;
+        for (let wall of walls) {
+            if (newX < wall.x + wall.w &&
+                newX + this.w > wall.x &&
+                newY < wall.y + wall.h &&
+                newY + this.h > wall.y) {
+                    return true;
+                }
+        }
+        return false;
     }
 
     loadSprites(row, cols) {

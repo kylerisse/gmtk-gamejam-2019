@@ -40,6 +40,8 @@ function preload() {
     // levels
     level1 = loadImage('levels/level1.png');
     level2 = loadImage('levels/level2.png');
+    level3 = loadImage('levels/level3.png');
+    level4 = loadImage('levels/level4.png');
 
     // menus
     menuImage = loadImage('images/menu.png');
@@ -70,6 +72,8 @@ function setup() {
     levels = [];
     levels.push(new Level(level1));
     levels.push(new Level(level2));
+    levels.push(new Level(level3));
+    levels.push(new Level(level4));
     currentLevel = 1;
 
     zombies = [];
@@ -129,6 +133,7 @@ function draw() {
             zombies[i].update();
             zombies[i].draw();
             if (!zombies[i].exists) {
+                zombieHitSound.play();
                 zombies.splice(i, 1);
             }
         }
