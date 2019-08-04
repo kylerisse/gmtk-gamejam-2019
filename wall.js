@@ -6,7 +6,7 @@ class Wall {
         this.h = height;
     }
 
-    draw(color) {
+    draw() {
         noStroke();
         fill(64);
         rect(this.x, this.y, this.w, this.h);

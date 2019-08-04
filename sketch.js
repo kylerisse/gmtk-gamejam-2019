@@ -12,6 +12,16 @@ var zombiehit;
 var gameMusic;
 var menuMusic;
 
+var menuImage;
+var aboutImage;
+
+var levels;
+var currentLevel;
+
+var walls;
+
+var gameState;
+
 const WINDOW_WIDTH = 1024;
 const WINDOW_HEIGHT = 768;
 const EDGE_WALL_THICKNESS = 32;
@@ -22,10 +32,19 @@ const rightEdge = 890;
 const leftEdge = 30;
 
 function preload() {
+    // graphics
     zombieSpriteSheet = loadImage('images/zombie/zombie.png');
     groundImage = loadImage('images/ground/ground.png', 128, 128);
     playerSpriteSheet = loadImage('images/player/player.png');
 
+    // levels
+    level1 = loadImage('levels/level1.png');
+
+    // menus
+    menuImage = loadImage('images/menu.png');
+    aboutImage = loadImage('images/about.png');
+
+    // sounds
     soundFormats('mp3');
     arrowSound = loadSound('sound/arrow.mp3');
     arrowSound.setVolume(0.4);
@@ -44,37 +63,27 @@ function preload() {
 function setup() {
     createCanvas(WINDOW_WIDTH, WINDOW_HEIGHT);
     frameRate(30);
-    zombies = [];
-    player = new Player(width / 2, height / 2);
-    gameMusic.play();
 
-    walls = Wall.getBorderWalls(
-        WINDOW_WIDTH,
-        WINDOW_HEIGHT,
-        EDGE_WALL_THICKNESS
-    );
+    walls = [];
+
+    levels = [];
+    levels.push(new Level(level1));
+    currentLevel = 1;
+
+    zombies = [];
+    gameState = 'MENU';
+
+    player = new Player(width / 2, height / 2);
 }
 
 function draw() {
-    background(groundImage);
-    if (zombies.length > 0 && random(10000) > 9995) {
-        zombieGruntSound.play();
-    }
-
-    walls.forEach(wall => {
-        wall.draw();
-    });
-
-    for (let i = zombies.length - 1; i >= 0; i--) {
-        zombies[i].update();
-        zombies[i].draw();
-        if (zombies[i].x < -100 || zombies[i].x > width + 100) {
-            zombies.splice(i, 1);
-            return;
+    if (gameState == 'MENU') {
+        background(menuImage);
+        if (gameMusic.isPlaying()) {
+            gameMusic.stop();
         }
-        if (zombies[i].y < -100 || zombies[i].y > height + 100) {
-            zombies.splice(i, 1);
-            return;
+        if (!menuMusic.isPlaying()) {
+            menuMusic.play();
         }
     }
 
@@ -92,51 +101,132 @@ function draw() {
         playerArrow.update(wall_hit);
         playerArrow.draw('white');
     }
+
+    if (gameState == 'ABOUT') {
+        background(aboutImage);
+    }
+
+    if (gameState == 'DEAD') {
+    }
+
+    if (gameState == 'LOADING') {
+        levels[currentLevel - 1].loadLevel();
+        gameState = 'LEVEL';
+    }
+
+    if (gameState == 'LEVEL') {
+        if (menuMusic.isPlaying()) {
+            menuMusic.stop();
+        }
+        if (!gameMusic.isPlaying()) {
+            gameMusic.play();
+        }
+        background(groundImage);
+        for (let i = walls.length - 1; i >= 0; i--) {
+            walls[i].draw();
+        }
+        if (zombies.length <= 0) {
+            if (currentLevel + 1 > levels.length) {
+                currentLevel = 1;
+            } else {
+                curentLevel++;
+            }
+            gameState = 'LOADING';
+        }
+        if (random(10000) > 9995) {
+            zombieGruntSound.play();
+        }
+        for (let i = zombies.length - 1; i >= 0; i--) {
+            zombies[i].update();
+            zombies[i].draw();
+            if (zombies[i].x < -100 || zombies[i].x > width + 100) {
+                zombies.splice(i, 1);
+                return;
+            }
+            if (zombies[i].y < -100 || zombies[i].y > height + 100) {
+                zombies.splice(i, 1);
+                return;
+            }
+        }
+        player.update();
+        player.draw();
+
+        if (playerArrow !== undefined) {
+            playerArrow.update();
+            playerArrow.draw('white');
+        }
+    }
 }
 
 function keyReleased() {
-    // left
-    if (keyCode === 65) {
-        player.movingLeft = false;
-    }
-    // right
-    if (keyCode === 68) {
-        player.movingRight = false;
-    }
-    // up
-    if (keyCode === 87) {
-        player.movingUp = false;
-    }
-    // down
-    if (keyCode === 83) {
-        player.movingDown = false;
+    if (gameState === 'LEVEL') {
+        // left
+        if (keyCode === 65) {
+            player.movingLeft = false;
+        }
+        // right
+        if (keyCode === 68) {
+            player.movingRight = false;
+        }
+        // up
+        if (keyCode === 87) {
+            player.movingUp = false;
+        }
+        // down
+        if (keyCode === 83) {
+            player.movingDown = false;
+        }
     }
 }
 
 function keyPressed() {
-    // left
-    if (keyCode === 65) {
-        player.movingLeft = true;
-    }
-    // right
-    if (keyCode === 68) {
-        player.movingRight = true;
-    }
-    // up
-    if (keyCode === 87) {
-        player.movingUp = true;
-    }
-    // down
-    if (keyCode === 83) {
-        player.movingDown = true;
+    if (gameState === 'LEVEL') {
+        // left
+        if (keyCode === 65) {
+            player.movingLeft = true;
+        }
+        // right
+        if (keyCode === 68) {
+            player.movingRight = true;
+        }
+        // up
+        if (keyCode === 87) {
+            player.movingUp = true;
+        }
+        // down
+        if (keyCode === 83) {
+            player.movingDown = true;
+        }
     }
 }
 
 function mouseReleased() {
-    player.aiming = false;
-    player.fire();
+    if (gameState == 'LEVEL') {
+        player.aiming = false;
+        player.fire();
+    }
 }
 
 function mousePressed() {
-    player.aiming = true;
+    if (gameState === 'LEVEL') {
+        if (playerArrow === undefined) {
+            player.aiming = true;
+        }
+    }
+    if (gameState == 'MENU') {
+        if (mouseX > 450 && mouseX < 650 && mouseY > 530 && mouseY < 600) {
+            gameState = 'LOADING';
+        }
+        if (mouseX > 710 && mouseX < 975 && mouseY > 530 && mouseY < 600) {
+            gameState = 'ABOUT';
+        }
+    }
+    if (gameState == 'ABOUT') {
+        if (mouseX > 120 && mouseX < 240 && mouseY > 640 && mouseY < 700) {
+            gameState = 'MENU';
+        }
+    }
+    if (gameState == 'DEAD') {
+        gameState = 'MENU';
+    }
 }
