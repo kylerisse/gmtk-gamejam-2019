@@ -69,12 +69,6 @@ function setup() {
 
     player = new Player(width / 2, height / 2);
     gameMusic.play();
-
-    walls = Wall.getBorderWalls(
-        WINDOW_WIDTH,
-        WINDOW_HEIGHT,
-        EDGE_WALL_THICKNESS
-    );
 }
 
 function draw() {
@@ -89,12 +83,11 @@ function draw() {
             gameMusic.play();
         }
         background(groundImage);
+        for (let i = walls.length - 1; i >= 0; i--) {
+            walls[i].draw();
+        }
         if (zombies.length > 0 && random(10000) > 9995) {
             zombieGruntSound.play();
-        walls.forEach(wall => {
-            wall.draw();
-        });
-
         }
         for (let i = zombies.length - 1; i >= 0; i--) {
             zombies[i].update();
