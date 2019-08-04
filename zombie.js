@@ -6,6 +6,8 @@ class Zombie {
         this.y = y;
         this.w = 64;
 
+        this.exists = true;
+
         // load sprites from spriteSheet
         this.downImg = this.loadSprites(0);
         this.rightImg = this.loadSprites(1);
@@ -34,16 +36,27 @@ class Zombie {
                 }
             }
             if (this.dir == 'DOWN') {
-               this.y += 1;
+                if (!this.wallCollides(0, 1)) {
+                    this.y += 1;
+                }
             }
             if (this.dir == 'RIGHT') {
-               this.x += 1;
+                if (!this.wallCollides(1, 0)) {
+                    this.x += 1;
+                }
             }
             if (this.dir == 'UP') {
-               this.y -= 1;
+                if (!this.wallCollides(0, -1)) {
+                    this.y -= 1;
+                }
             }
             if (this.dir == 'LEFT') {
-               this.x -= 1;
+                if (!this.wallCollides(-1, 0)) {
+                    this.x -= 1;
+                }
+            }
+            if (this.playerCollides()) {
+                gameState = "DEAD";
             }
         }
 
@@ -100,5 +113,29 @@ class Zombie {
         }
         return animations;
     }
+
+    wallCollides(x, y) {
+        for (let wall of walls) {
+            if (this.x + x == wall.x || this.x + x == wall.x + wall.w) {
+                return true;
+            } 
+            if (this.y + y == wall.y || this.y + y == wall.y + wall.h) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    playerCollides(){}
+    /***
+    playerCollides() {
+        if (this.x > player.x && this.x < player.x + player.w) {
+            return true;
+        }
+        if (this.y > player.y && this.y < player.y + player.w) {
+            return true;
+        }
+    }
+    ***/
 
 }

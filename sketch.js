@@ -39,6 +39,7 @@ function preload() {
 
     // levels
     level1 = loadImage('levels/level1.png');
+    level2 = loadImage('levels/level2.png');
 
     // menus
     menuImage = loadImage('images/menu.png');
@@ -68,6 +69,7 @@ function setup() {
 
     levels = [];
     levels.push(new Level(level1));
+    levels.push(new Level(level2));
     currentLevel = 1;
 
     zombies = [];
@@ -87,26 +89,13 @@ function draw() {
         }
     }
 
-    player.update();
-    player.draw();
-
-    if (playerArrow !== undefined) {
-        let wall_hit = null;
-        walls.forEach(wall => {
-            if (playerArrow.check_collision(wall)) {
-                wall_hit = wall;
-            }
-        });
-
-        playerArrow.update(wall_hit);
-        playerArrow.draw('white');
-    }
-
     if (gameState == 'ABOUT') {
         background(aboutImage);
     }
 
-    if (gameState == 'DEAD') {
+    if (gameState == "DEAD") {
+        fill(255, 0, 0, 25);
+        rect(0, 0, 1024, 768);
     }
 
     if (gameState == 'LOADING') {
@@ -129,7 +118,7 @@ function draw() {
             if (currentLevel + 1 > levels.length) {
                 currentLevel = 1;
             } else {
-                curentLevel++;
+                currentLevel++;
             }
             gameState = 'LOADING';
         }
@@ -139,13 +128,8 @@ function draw() {
         for (let i = zombies.length - 1; i >= 0; i--) {
             zombies[i].update();
             zombies[i].draw();
-            if (zombies[i].x < -100 || zombies[i].x > width + 100) {
+            if (!zombies[i].exists) {
                 zombies.splice(i, 1);
-                return;
-            }
-            if (zombies[i].y < -100 || zombies[i].y > height + 100) {
-                zombies.splice(i, 1);
-                return;
             }
         }
         player.update();
@@ -153,6 +137,18 @@ function draw() {
 
         if (playerArrow !== undefined) {
             playerArrow.update();
+            playerArrow.draw('white');
+        }
+
+        if (playerArrow !== undefined) {
+            let wall_hit = null;
+            walls.forEach(wall => {
+                if (playerArrow.check_collision(wall)) {
+                    wall_hit = wall;
+                }
+            });
+    
+            playerArrow.update(wall_hit);
             playerArrow.draw('white');
         }
     }
