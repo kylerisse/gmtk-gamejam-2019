@@ -13,7 +13,6 @@ class Arrow {
         translate(this.base.x, this.base.y);
         line(0, 0, this.vec.x, this.vec.y);
         rotate(this.vec.heading());
-        let arrowSize = 5;
         translate(this.vec.mag() - Arrow.HEAD_SIZE, 0);
         triangle(
             0,
@@ -28,7 +27,7 @@ class Arrow {
 
     check_collision(e) {}
 
-    bounce() {}
+    bounce(against_vec) {}
 
     update() {
         const dir = this.vec.copy().normalize();
