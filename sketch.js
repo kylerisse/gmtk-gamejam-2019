@@ -1,9 +1,14 @@
-
 var zombieSpriteSheet;
 var zombies;
 var groundImage;
 var playerSpriteSheet;
 var player;
+var playerArrow;
+
+const topEdge = 30;
+const bottomEdge = 688;
+const rightEdge = 890;
+const leftEdge = 30;
 
 function preload() {
     zombieSpriteSheet = loadImage('images/zombie/zombie.png');
@@ -19,65 +24,71 @@ function setup() {
 }
 
 function draw() {
-    background(groundImage)
+    background(groundImage);
     for (let i = zombies.length - 1; i >= 0; i--) {
-        zombies[i].update()
-        zombies[i].draw()
+        zombies[i].update();
+        zombies[i].draw();
         if (zombies[i].x < -100 || zombies[i].x > width + 100) {
             zombies.splice(i, 1);
-            return
+            return;
         }
         if (zombies[i].y < -100 || zombies[i].y > height + 100) {
             zombies.splice(i, 1);
-            return
+            return;
         }
     }
     player.update();
     player.draw();
+
+    if (playerArrow !== undefined) {
+        playerArrow.update();
+        playerArrow.draw('white');
+    }
 }
 
 function keyReleased() {
     // left
     if (keyCode === 65) {
-
+        player.movingLeft = false;
     }
     // right
     if (keyCode === 68) {
-
+        player.movingRight = false;
     }
     // up
     if (keyCode === 87) {
-
+        player.movingUp = false;
     }
     // down
     if (keyCode === 83) {
-
+        player.movingDown = false;
     }
 }
 
 function keyPressed() {
     // left
-    if (keyCode == 65) {
-        
+    if (keyCode === 65) {
+        player.movingLeft = true;
     }
     // right
-    if (keyCode == 68) {
-
+    if (keyCode === 68) {
+        player.movingRight = true;
     }
     // up
     if (keyCode === 87) {
-
+        player.movingUp = true;
     }
     // down
-    if (keyCode == 83) {
-
+    if (keyCode === 83) {
+        player.movingDown = true;
     }
 }
 
 function mouseReleased() {
-
+    player.aiming = false;
+    player.fire();
 }
 
 function mousePressed() {
-    zombies.push(new Zombie(mouseX, mouseY));
+    player.aiming = true;
 }

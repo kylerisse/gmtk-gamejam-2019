@@ -2,8 +2,9 @@
 class Zombie {
 
     constructor(x, y) {
-        this.x = x
-        this.y = y
+        this.x = x;
+        this.y = y;
+        this.w = 64;
 
         // load sprites from spriteSheet
         this.downImg = this.loadSprites(0);
@@ -94,7 +95,7 @@ class Zombie {
 
     loadSprites(row) {
         let animations = []
-        for (let i = 0; i <= 2; i++) {
+        for (let i = 0; i < 3; i++) {
             animations.push(zombieSpriteSheet.get(i * 64, row * 64, 64, 64));
         }
         return animations;

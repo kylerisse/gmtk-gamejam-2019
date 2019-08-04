@@ -1,7 +1,8 @@
 class Arrow {
-    constructor(base, vec) {
+    constructor(base, vec, speed) {
         this.base = base;
         this.vec = vec;
+        this.speed = speed === undefined ? Arrow.DEFAULT_SPEED : speed;
     }
 
     draw(color) {
@@ -27,19 +28,38 @@ class Arrow {
 
     check_collision(e) {}
 
-    get_bounce(e) {}
+    bounce() {}
 
-    update() {}
+    update() {
+        const dir = this.vec.copy().normalize();
+        const mag = this.vec.mag();
 
-    static Fire(x, y, dir) {
-        const arrow = Arrow(createVector(x, y), dir);
+        this.base = p5.Vector.add(this.base, p5.Vector.mult(dir, this.speed));
     }
 
-    static get LENGTH() {
+    static Fire(e_x, e_y, offset_scalar, to_x, to_y) {
+        const vec = p5.Vector.sub(
+            createVector(to_x, to_y),
+            createVector(e_x, e_y)
+        ).normalize();
+
+        const offset = p5.Vector.mult(vec, offset_scalar);
+        const base = createVector(e_x, e_y).add(offset);
+
+        const arrow = new Arrow(base, vec.mult(Arrow.DEFAULT_LENGTH));
+
+        return arrow;
+    }
+
+    static get DEFAULT_LENGTH() {
         return 20;
     }
 
     static get HEAD_SIZE() {
-        return 5;
+        return 2;
+    }
+
+    static get DEFAULT_SPEED() {
+        return 20;
     }
 }
