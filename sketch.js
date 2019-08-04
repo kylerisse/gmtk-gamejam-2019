@@ -58,7 +58,7 @@ function preload() {
     menuMusic = loadSound('sound/jitters.mp3');
     menuMusic.setVolume(0.1);
     menuMusic.setLoop(true);
-    gameMusic = loadSound('sound/gameMusic');
+    gameMusic = loadSound('sound/gamemusic.mp3');
     gameMusic.setVolume(0.1);
     gameMusic.setLoop(true);
 }
