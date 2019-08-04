@@ -12,6 +12,9 @@ var zombiehit;
 var gameMusic;
 var menuMusic;
 
+var menuImage;
+var aboutImage;
+
 var levels;
 var currentLevel;
 
@@ -37,6 +40,10 @@ function preload() {
 
     // levels
     level1 = loadImage('levels/level1.png');
+
+    // menus
+    menuImage = loadImage('images/menu.png');
+    aboutImage = loadImage('images/about.png');
 
     // sounds
     soundFormats('mp3');
@@ -65,13 +72,30 @@ function setup() {
     currentLevel = 1;
 
     zombies = [];
-    gameState = "LOADING";
+    gameState = "MENU";
 
     player = new Player(width / 2, height / 2);
-    gameMusic.play();
 }
 
 function draw() {
+
+    if (gameState == "MENU") {
+        background(menuImage);
+        if (gameMusic.isPlaying()) {
+            gameMusic.stop();
+        }
+        if (!menuMusic.isPlaying()) {
+            menuMusic.play();
+        }
+    }
+
+    if (gameState == "ABOUT") {
+        background(aboutImage);
+    }
+
+    if (gameState == "DEAD") {
+
+    }
 
     if (gameState == "LOADING") {
         levels[currentLevel - 1].loadLevel();
@@ -79,6 +103,9 @@ function draw() {
     }
 
     if (gameState == "LEVEL") {
+        if (menuMusic.isPlaying()) {
+            menuMusic.stop();
+        }
         if (!gameMusic.isPlaying()) {
             gameMusic.play();
         }
@@ -86,7 +113,15 @@ function draw() {
         for (let i = walls.length - 1; i >= 0; i--) {
             walls[i].draw();
         }
-        if (zombies.length > 0 && random(10000) > 9995) {
+        if (zombies.length <= 0) {
+            if (currentLevel + 1 > levels.length) {
+                currentLevel = 1;
+            } else {
+                curentLevel++;
+            }
+            gameState = "LOADING";
+        }
+        if (random(10000) > 9995) {
             zombieGruntSound.play();
         }
         for (let i = zombies.length - 1; i >= 0; i--) {
@@ -112,50 +147,74 @@ function draw() {
 }
 
 function keyReleased() {
-    // left
-    if (keyCode === 65) {
-        player.movingLeft = false;
-    }
-    // right
-    if (keyCode === 68) {
-        player.movingRight = false;
-    }
-    // up
-    if (keyCode === 87) {
-        player.movingUp = false;
-    }
-    // down
-    if (keyCode === 83) {
-        player.movingDown = false;
+    if (gameState === "LEVEL") {
+        // left
+        if (keyCode === 65) {
+            player.movingLeft = false;
+        }
+        // right
+        if (keyCode === 68) {
+            player.movingRight = false;
+        }
+        // up
+        if (keyCode === 87) {
+            player.movingUp = false;
+        }
+        // down
+        if (keyCode === 83) {
+            player.movingDown = false;
+        }
     }
 }
 
 function keyPressed() {
-    // left
-    if (keyCode === 65) {
-        player.movingLeft = true;
-    }
-    // right
-    if (keyCode === 68) {
-        player.movingRight = true;
-    }
-    // up
-    if (keyCode === 87) {
-        player.movingUp = true;
-    }
-    // down
-    if (keyCode === 83) {
-        player.movingDown = true;
+    if (gameState === "LEVEL") {
+        // left
+        if (keyCode === 65) {
+            player.movingLeft = true;
+        }
+        // right
+        if (keyCode === 68) {
+            player.movingRight = true;
+        }
+        // up
+        if (keyCode === 87) {
+            player.movingUp = true;
+        }
+        // down
+        if (keyCode === 83) {
+            player.movingDown = true;
+        }
     }
 }
 
 function mouseReleased() {
-    player.aiming = false;
-    player.fire();
+    if (gameState == "LEVEL") {
+        player.aiming = false;
+        player.fire();
+    }
 }
 
 function mousePressed() {
-    if (playerArrow === undefined) {
-        player.aiming = true;
+    if (gameState === "LEVEL") {
+        if (playerArrow === undefined) {
+            player.aiming = true;
+        }
+    }
+    if (gameState == "MENU") {
+        if (mouseX > 450 && mouseX < 650 && mouseY > 530 && mouseY < 600) {
+            gameState = "LOADING";
+        }
+        if (mouseX > 710 && mouseX < 975 && mouseY > 530 && mouseY < 600) {
+            gameState = "ABOUT";
+        }
+    }
+    if (gameState == "ABOUT") {
+        if (mouseX > 120 && mouseX < 240 && mouseY > 640 && mouseY < 700) {
+            gameState = "MENU";
+        }
+    }
+    if (gameState == "DEAD") {
+        gameState = "MENU";
     }
 }
