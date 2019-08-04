@@ -82,7 +82,14 @@ function draw() {
     player.draw();
 
     if (playerArrow !== undefined) {
-        playerArrow.update();
+        let wall_hit = null;
+        walls.forEach(wall => {
+            if (playerArrow.check_collision(wall)) {
+                wall_hit = wall;
+            }
+        });
+
+        playerArrow.update(wall_hit);
         playerArrow.draw('white');
     }
 }

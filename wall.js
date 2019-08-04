@@ -2,14 +2,14 @@ class Wall {
     constructor(x, y, width, height) {
         this.x = x;
         this.y = y;
-        this.width = width;
-        this.height = height;
+        this.w = width;
+        this.h = height;
     }
 
     draw(color) {
         noStroke();
         fill(64);
-        rect(this.x, this.y, this.width, this.height);
+        rect(this.x, this.y, this.w, this.h);
     }
 
     static getBorderWalls(window_width, window_height, thickness) {
@@ -38,5 +38,9 @@ class Wall {
         );
 
         return [left, right, top, bottom];
+    }
+
+    get_lines() {
+        return get_rectangle_lines(this.x, this.y, this.w, this.h);
     }
 }
